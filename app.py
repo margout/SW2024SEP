@@ -127,14 +127,14 @@ if input_file is not None:    # Condition to check the input file must have some
                 st.subheader("Exploratory Data Analysis (EDA)")
 
                 # Correlation heatmap (using first 5 features)
-                features_small = features.iloc[:, :5]  # Select the first 5 features
+                features_small = features  # Select the first 5 features
                 fig = plt.figure()
                 sns.heatmap(features_small.corr(), annot=True, cmap='coolwarm', fmt=".2f")
                 plt.title("Correlation Heatmap")                    # Title of plot
                 st.pyplot(fig)                                      # Displaying the plot
 
                 # Pairplot for visualizing pairwise relationships (using first 5 features)
-                subset_features = features.iloc[:, :5]  # Select the first 5 features
+                subset_features = features  # Select the first 5 features
                 subset_data = subset_features.copy()
                 subset_data[data.columns[-1]] = labels  # Add label column for hue
                 
@@ -157,7 +157,7 @@ if input_file is not None:    # Condition to check the input file must have some
                 pca = PCA(n_components=n_comp)
                 reduced_features = pca.fit_transform(features)       # Returning reduced features based on result from the slider
 
-                st.write("Explained Variance Ratio: "+str(pca.explained_variance_ratio_))
+                #st.write("Explained Variance Ratio: "+str(pca.explained_variance_ratio_))
                 cols=['PCA'+str(i) for i in range(n_comp)]
                 # Display reduced dataset
                 df_new = pd.DataFrame(reduced_features, columns=cols)
@@ -256,7 +256,7 @@ if input_file is not None:    # Condition to check the input file must have some
                             bar_width = 0.1
                             index = range(len(labels))
                             # creating the dataset
-                            data = {'KNN Train':knn_train_before[j],'KNN(PCA) Train':knn_train_after[j] ,'RF Train':rf_train_before[j],'RF(PCA) Train':rf_train_after[j]}
+                            data = {'KNN':knn_train_before[j],'KNN(PCA)':knn_train_after[j] ,'RF':rf_train_before[j],'RF(PCA)':rf_train_after[j]}
                             keys = list(data.keys())
                             vals = list(data.values())
                              
@@ -288,7 +288,13 @@ if input_file is not None:    # Condition to check the input file must have some
                     plot_metrics(knn_test_before,knn_test_after,rf_test_before,rf_test_after,"test")
                     
             with tabs[3]:
-                st.write("### How to run the application using docker")
+
+                st.write("## How to run the application using docker")
+                items = ["Run docker image using the following command", "docker run -d --name python-container -p 8501:8501 datamining-app", "The app will run on http://localhost:8501/"]
+                for i, item in enumerate(items, 1):
+                    st.write(f"{i}. {item}")   
+               
+                
                 st.write("### Steps performed" )
                  
                 st.write("#### Data Upload" )
